@@ -42,7 +42,7 @@ namespace How.To.Use.TheHttpClient
         }
 
         [TestMethod]
-        public async void It_Should_Be_Possible_To_Post_Asynchronously()
+        public async Task It_Should_Be_Possible_To_Post_Asynchronously()
         {
             var content = new FormUrlEncodedContent(
                 new Dictionary<string, string>
@@ -82,7 +82,6 @@ namespace How.To.Use.TheHttpClient
                 Assert.IsTrue(task.IsCanceled );
             }
         }
-
 
         [TestMethod]
         public async void You_Can_Load_An_Image()
@@ -152,5 +151,47 @@ namespace How.To.Use.TheHttpClient
         }
 
         // http://msdn.microsoft.com/en-us/library/windows/apps/windows.networking.backgroundtransfer.aspx
+    }
+
+    [TestClass]
+    public class When_Serializing_To_Json_Using_fastJSON
+    {
+        [TestMethod]
+        public void It_Should_Work_With_Polymorphic_Objects()
+        {
+            var instruments = new List<MusicalInstrument>()
+            {
+                new Guitar{ StringCount = 6},
+                new Cajon {HasSnare = true}
+            };
+
+            var json = fastJSON.JSON.Instance.ToJSON(instruments);
+
+            Console.WriteLine(json);
+
+            var backToLife = fastJSON.JSON.Instance.ToObject<List<MusicalInstrument>>(json);
+        }
+
+    }
+
+    [TestClass]
+    public class When_Serializing_Using_NewtonSoft
+    {
+        [TestMethod]
+        public void It_Should_Work_With_Polymorphic_Objects()
+        {
+            var instruments = new List<MusicalInstrument>()
+            {
+                new Guitar{ StringCount = 6},
+                new Cajon {HasSnare = true}
+            };
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(instruments);
+
+            Console.WriteLine(json);
+
+            var backToLife = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MusicalInstrument>>(json);
+        }
+
     }
 }
